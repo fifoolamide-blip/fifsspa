@@ -1,10 +1,16 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 
 const app = express()
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Determine the frontend URL for CORS
 const getFrontendUrl = () => {
@@ -30,10 +36,13 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
+// Serve static files
+app.use(express.static(path.join(__dirname, '..')))
+
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'Server is running', 
+  res.json({
+    status: 'Server is running',
     timestamp: new Date(),
     environment: process.env.NODE_ENV || 'production',
     frontend: getFrontendUrl()
@@ -121,9 +130,14 @@ app.post('/api/admin/login', async (req, res) => {
   }
 })
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ success: false, error: 'Route not found' })
+// Catch-all handler: send back index.html for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index.html'))
+})
+
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ success: false, error: 'API route not found' })
 })
 
 // Error handler
