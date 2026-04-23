@@ -5,6 +5,25 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    strictPort: false
+    strictPort: false,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        rewrite: (path) => path
+      }
+    }
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['react-icons']
+        }
+      }
+    }
   }
 })

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, X } from 'react-icons/fa'
+import { FaBars, FaTimes } from 'react-icons/fa'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -51,9 +51,9 @@ export default function Header() {
             className="md:hidden text-2xl"
           >
             {isMenuOpen ? (
-              <X className="text-gray-700" />
+              <FaTimes className="text-gray-700" />
             ) : (
-              <Menu className="text-gray-700" />
+              <FaBars className="text-gray-700" />
             )}
           </button>
         </div>
