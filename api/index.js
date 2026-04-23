@@ -37,7 +37,7 @@ app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
 // Serve static files
-app.use(express.static(path.join(__dirname, '..')))
+// app.use(express.static(path.join(__dirname, '..')))
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -131,9 +131,9 @@ app.post('/api/admin/login', async (req, res) => {
 })
 
 // Catch-all handler: send back index.html for client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index.html'))
-})
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '..', 'index.html'))
+// })
 
 // 404 handler for API routes
 app.use('/api/*', (req, res) => {
